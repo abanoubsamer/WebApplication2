@@ -37,6 +37,7 @@ namespace WebApplication2.Controllers
         [Route("ProductController/Index")]
         public async Task<IActionResult> Index()
         {
+            ViewBag.Name = Request.Cookies["UserName"];
             var products = await _productServices.GetProductsAsync();
 
             return View(products);

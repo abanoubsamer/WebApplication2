@@ -9,7 +9,8 @@ namespace WebApplication2.Controllers
     {
 
         private readonly AppDbContext _db;
-
+        private int UserId = 1;
+        private string UserName = "BiboSamer";
         public HomeController(AppDbContext context)
         {
             _db = context;
@@ -19,6 +20,12 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public async Task <IActionResult> Index()
         {
+            CookieOptions Cookiesoption = new CookieOptions();
+            Cookiesoption.Expires = DateTime.UtcNow.AddSeconds(50);
+            Response.Cookies.Append("UserId", UserId.ToString(),Cookiesoption);
+            Response.Cookies.Append("UserName", UserName,Cookiesoption);
+
+
             var product = await _db.Category.Include(p => p.Products).ToListAsync();
             return View( product);
         }
