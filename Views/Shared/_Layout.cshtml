@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AppName</title>
+
+	<link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/lib/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+
+</head>
+<style>
+    .megasubmenu {
+        padding: 1rem;
+        display: none; /* Hide mega submenu by default */
+        position: absolute;
+        top: 0;
+        left: 100%;
+        min-height: 100%;
+        min-width: 500px;
+        z-index: 1000;
+        background-color: #fff;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+
+    /* Dropdown hover adjustment */
+    .dropdown:hover > .dropdown-menu {
+        display: block !important; /* Show dropdown menu on hover */
+    }
+
+    .has-megasubmenu:hover > .megasubmenu {
+        display: block !important; /* Show megasubmenu on hover */
+    }
+
+    /* For the overlay effect */
+    @@media all and (min-width: 991px) {
+        .dropdown:after {
+            content: '';
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transition: opacity .15s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+            background-color: rgba(0, 0, 0, .5);
+            pointer-events: none;
+        }
+
+        .dropdown:hover .nav-link {
+            position: relative;
+            z-index: 12;
+        }
+
+        .dropdown:hover:after {
+            z-index: 10;
+            opacity: 1;
+            visibility: visible;
+            position: fixed;
+        }
+    }
+</style>
+
+
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">Brand</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="main_nav">
+                <ul class="navbar-nav">
+                
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Product" asp-action="Index">Product</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Categories" asp-action="Index">Category</a></li>
+
+                    <li class="nav-item"><a class="nav-link" href="#"> About </a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"> Services </a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle" href="#" data-toggle="dropdown">  More items  </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"> Submenu item 1</a></li>
+                            <li><a class="dropdown-item" href="#"> Submenu item 2 </a></li>
+                            <li><a class="dropdown-item" href="#"> Submenu item 3</a></li>
+                            <li><a class="dropdown-item" href="#"> Submenu item 4 </a></li>
+							<li class="has-megasubmenu">
+								<a class="dropdown-item" href="#"> Dropdown item 5 &raquo; </a>
+								<div class="megasubmenu dropdown-menu">
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+									tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+									consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+									cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+									proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+									tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+									consequat.
+								</div>
+							</li>
+                            <li class="has-megasubmenu">
+                                <a class="dropdown-item" href="#"> Dropdown item 5 &raquo; </a>
+                                <div class="megasubmenu dropdown-menu">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                    consequat.
+                                </div>
+                            </li>
+                            <li class="has-megasubmenu">
+                                <a class="dropdown-item" href="#"> Dropdown item 5 &raquo; </a>
+                                <div class="megasubmenu dropdown-menu">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                              
+                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                    consequat.
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div> <!-- navbar-collapse.// -->
+        </nav>
+    </header>
+    <div class="container">
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - School - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+        @await RenderSectionAsync("Scripts",false)
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            // Prevent closing from click inside dropdown
+            document.querySelectorAll('.dropdown-menu').forEach(function (element) {
+                element.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            });
+
+            // Handle mega submenu for smaller screens
+            if (window.innerWidth < 992) {
+                document.querySelectorAll('.has-megasubmenu').forEach(function (element) {
+                    element.addEventListener('click', function (e) {
+                        let nextEl = this.querySelector('.megasubmenu');
+                        if (nextEl) {
+                            e.preventDefault(); // Prevent default link behavior
+                            nextEl.style.display = (nextEl.style.display === 'block') ? 'none' : 'block';
+                        }
+                    });
+                });
+            }
+
+            // Trigger overlay effect
+            document.querySelectorAll('.dropdown').forEach(function (element) {
+                element.addEventListener('mouseenter', function () {
+                    document.body.classList.add('dropdown-open');
+                });
+                element.addEventListener('mouseleave', function () {
+                    document.body.classList.remove('dropdown-open');
+                });
+            });
+        });
+
+
+        // Initialize jQuery UI tabs
+     
+    </script>
+
+
+   </body>
+</html>

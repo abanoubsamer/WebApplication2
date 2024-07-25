@@ -1,0 +1,90 @@
+﻿@model EditProductViewMoldes
+
+<style>
+    #tabs-1 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-container {
+        flex: 1;
+    }
+
+    .card-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+    }
+
+    .card {
+        width: 10rem;
+    }
+</style>
+
+<div id="tabs">
+    <ul>
+        <!-- Tab titles can go here -->
+    </ul>
+    <div id="tabs-1">
+        <div class="form-container">
+            <form asp-action="Edit" asp-controller="Product" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="border p-3 mt-4">
+                    <div class="row p-2">
+                        <h2 class="text-primary">Edit Item</h2>
+
+                        <hr />
+
+                        <div class="card-container">
+                            <div class="card">
+                                @* <img class="card-img-top" src="/@Model.Images.FirstOrDefault()" alt="Card image cap"> *@
+                            </div>
+                        </div>
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="id" class="control-label"></label>
+                            <input asp-for="id" class="form-control" disabled readonly />
+                            <span asp-validation-for="id" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class=" mb-3 ">
+                            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Gategories">
+                                <option value="">-- Select Course Level --</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" required />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Files" class="control-label"></label>
+                            <input asp-for="Files" type="file" class="form-control" multiple />
+                            <span asp-validation-for="Files" class="text-danger"></span>
+                        </div>
+
+                        <br />
+                        <hr />
+                        <div class="mb-3">
+                            <button type="submit" id="submit" class="btn btn-success" style="border-radius: 10px; width:250px;">
+                                <i class="bi bi-check-circle"></i> &nbsp; Save Changes
+                            </button>
+                            <a asp-action="Index" asp-controller="Product" class="btn btn-primary" style="border-radius: 10px; width:250px;">
+                                <i class="bi bi-skip-backward-circle-fill"></i>&nbsp; Back To Items
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

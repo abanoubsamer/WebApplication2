@@ -1,0 +1,50 @@
+﻿@model IEnumerable<WebApplication2.Models.Product>
+
+<div class="container">
+    <hr />
+    <h1>Product List</h1>
+    <a asp-action="Create" asp-controller="Product" class="btn btn-primary">Create</a>
+
+    <table class="table table-dark table-striped table-hover table-bordered text-center" id="myTable">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Category</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>@p.id</td>
+                    <td>@p.Name</td>
+                    <td>@p.Price</td>
+                    <td>@p.Categorys?.Name</td> <!-- Use null-conditional operator -->
+                    <td>
+                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@p.id" class="btn btn-success" style="border-radius: 10px;">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@p.id" class="btn btn-info" style="border-radius: 10px;">
+                            <i class="bi bi-info-circle-fill"></i>
+                        </a>
+                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@p.id" class="btn btn-danger" style="border-radius: 10px;">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}

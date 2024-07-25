@@ -1,0 +1,49 @@
+﻿@model IEnumerable<WebApplication2.Models.Category>
+
+<style>
+    .card-img-top {
+        width: 10rem;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+    <hr/>
+
+<div class="container">
+    <div class="row">
+        <!-- First Card -->
+        @foreach(var itam in Model)
+        {
+
+            <h1>@itam.Name</h1>
+            foreach(var product in itam.Products)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                      @*   <img class="card-img-top" src="/@product.Image" alt="Card image cap"> *@
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">Price: @product.Price</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@product.id" class="btn btn-info" style="border-radius: 10px;">
+                                    <i class="bi bi-info-circle-fill"></i>
+                                </a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+            <hr/>
+           
+        }
+       
+        
+    </div>
+</div>
+
+
+   
+    

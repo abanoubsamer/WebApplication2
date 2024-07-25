@@ -1,0 +1,45 @@
+﻿@model Product
+
+
+   
+    <div class="container ">
+
+        <hr />
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class=" table table-dark table-striped table-hover  table-bordered  text-center ">
+
+                    <thead>
+                        <tr>
+                            <td> @Html.DisplayNameFor(Model => Model.id)</td>
+                            <td> @Html.DisplayNameFor(Model => Model.Name)</td>
+                            <td> @Html.DisplayNameFor(Model => Model.Price)</td>
+                            <td> </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>@Model.id</td>
+                            <td>@Model.Name</td>
+                            <td>@Model.Price</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { Model.id })|
+                                @Html.ActionLink("Detalis", "Detalis", new { Model.id })|
+                                @Html.ActionLink("Delete", "Delete", new { Model.id })
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
+            </div>
+           
+
+        </div>
+      
+
+    </div>
+       
