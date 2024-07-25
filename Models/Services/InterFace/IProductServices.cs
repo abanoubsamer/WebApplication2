@@ -10,7 +10,8 @@ namespace WebApplication2.Models.Services.InterFace
         public Task<string> DeleteProductAsync(int productId);
         public Task<string> AddProductAsync(Product product,List<string>? Images);
         public Task<bool>IsProductNameExitsAsync(string Name);
-        public string UpdateProduct(Product product);
+        public Task<string> UpdateProduct(EditProductViewMoldes NewProduct);
+        public string GetTitel();
 
     }
 }

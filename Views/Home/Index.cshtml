@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<WebApplication2.Models.Category>
-
+@inject IProductServices _IP
 <style>
     .card-img-top {
         width: 10rem;
@@ -11,6 +11,10 @@
     <hr/>
 
 <div class="container">
+
+    <div class=" text-center">
+        <h1>@_IP.GetTitel()</h1>
+</div>
     <div class="row">
         <!-- First Card -->
         @foreach(var itam in Model)

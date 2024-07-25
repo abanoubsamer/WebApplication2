@@ -36,6 +36,9 @@ namespace WebApplication2.Models.Services.Implementation
                 return "Fail";
             }
 
+
+            // hna ana bolh htbd2h 3mlyt ale  transaction 
+            var trans= await _db.Database.BeginTransactionAsync();
             try
             {
                 // Add the product to the database
@@ -52,11 +55,16 @@ namespace WebApplication2.Models.Services.Implementation
                         return imageResult;
                     }
                 }
-
+                // hna ana bolh lw awy 7aga f4let fehm mt7fz 7aga fe ale data base
+                await trans.CommitAsync();
                 return "Success";
             }
             catch (Exception e)
             {
+                // hna ana bolh arg3ly b2h 3n kol ale 3mlyata fe ale data base
+                await trans.RollbackAsync();
+                // hna bolh ht7zfly kol ale ale swer ale anta 7ttha
+                _fileServices.RemoveImageAsync(images);
                 return $"Error adding product: {e.Message}";
             }
         }
@@ -66,6 +74,7 @@ namespace WebApplication2.Models.Services.Implementation
         #region DeleteProductAsync
         public async Task<string> DeleteProductAsync(int productId)
         {
+
             try
             {
                 var product = await GetProductByIdAsync(productId);
@@ -135,7 +144,9 @@ namespace WebApplication2.Models.Services.Implementation
         {
             try
             {
-                return await _db.Product.Include(c => c.Categorys).ToListAsync();
+                return await _db.Product
+                       .Include(p => p.Categorys)
+                       .Include(p => p.Images).ToListAsync();
             }
             catch (Exception e)
             {
@@ -143,6 +154,8 @@ namespace WebApplication2.Models.Services.Implementation
                 return Enumerable.Empty<Product>();
             }
         }
+
+      
         #endregion
 
         #region IsProductNameExitsAsync
@@ -153,24 +166,49 @@ namespace WebApplication2.Models.Services.Implementation
         #endregion
 
         #region UpdateProduct
-        public string UpdateProduct(Product newProduct)
+        public async Task <string> UpdateProduct(EditProductViewMoldes NewProduct)
         {
-            if (newProduct == null)
+            if (NewProduct == null)
             {
                 return "Product data is not provided.";
             }
+            var OldProduct = await GetProductByIdAsync(NewProduct.id);
 
+            if (OldProduct == null)
+            {
+                return "Product not found";
+            }
+            var taran = await _db.Database.BeginTransactionAsync();//begin transcation comment
             try
             {
+                
+                // check to user need update phote
+                if (NewProduct.Files != null)
+                {
+                    if (OldProduct.Images != null)
+                    {
+                        // hna a7na 3mla update fe file ale server
+                        var NewImagePath = await _fileServices.UpdateImageAsync(OldProduct.Images.Select(img => img.Images).ToList(), NewProduct.Files, "Product");
+                        // update in image table
+                        var r = await _imagesServices.UpdateImageAsync(OldProduct, NewImagePath);
+                    }
+                }
+
+                OldProduct.Name = NewProduct.Name;
+                OldProduct.Price = NewProduct.Price;
+                OldProduct.CategoryId = NewProduct.CategoryId;
+
                 // Set other properties as needed
-                _db.Product.Update(newProduct);
+                _db.Product.Update(OldProduct);
                 _db.SaveChanges();
+
+                await taran.CommitAsync();// end transcation comment;
                 return "Success";
 
             }
             catch (Exception e)
             {
-
+                await taran.RollbackAsync();//Block All Transaction In DataBase
                 return $"Error updating product: {e.Message}";
             }
         }
@@ -178,7 +216,10 @@ namespace WebApplication2.Models.Services.Implementation
 
 
 
-
+        public string GetTitel()
+        {
+            return "Home Page";
+        }
 
 
         #endregion

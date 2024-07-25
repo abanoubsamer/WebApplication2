@@ -14,14 +14,9 @@ namespace WebApplication2.Models
         public string Name { get; set; }
         [Required]
         public int Price { get; set; }
-
-      
         [ForeignKey("Category")]
         public int? CategoryId { get; set; }
-     
-
         public Category? Categorys { get; set; }
-
         public virtual ICollection<ProductImages>? Images { get; set; }
 
 

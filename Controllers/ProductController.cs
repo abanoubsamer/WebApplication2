@@ -44,9 +44,17 @@ namespace WebApplication2.Controllers
         #endregion
 
         #region Function
-        public async void GetCategory(Product? p = null)
+        public async Task GetCategory<T>(T? p = null)where T :class
         {
-            ViewBag.Gategories = new SelectList(await _Categories.GetCategoriesAsync(), "id", "Name", p?.CategoryId);
+            if (p == null)
+            {
+                ViewBag.Gategories = new SelectList(await _Categories.GetCategoriesAsync(), "id", "Name");
+            }
+            else
+            {
+                ViewBag.Gategories = new SelectList(await _Categories.GetCategoriesAsync(), "id", "Name",p);
+            }
+           
         }
         public async Task<IActionResult> IsProductExits(string Name)
         {
@@ -57,9 +65,9 @@ namespace WebApplication2.Controllers
         #region Create
         [HttpGet]
         [Route("ProductController/Create")]
-        public IActionResult Create()
+        public async Task <IActionResult> Create()
         {
-            GetCategory();
+            await GetCategory<Product>();
             return View();
         }
 
@@ -71,7 +79,7 @@ namespace WebApplication2.Controllers
             if (product == null)
             {
                 ModelState.AddModelError("", "Product data is null.");
-                GetCategory();
+                await GetCategory<Product>();
                 return View(new AddProductViewMoldes());
             }
             var prod = _Mapper.Map<Product>(product);
@@ -79,7 +87,7 @@ namespace WebApplication2.Controllers
 
             if (!ModelState.IsValid)
             {
-                GetCategory(prod);
+                await GetCategory(prod);
                 return View(product);
             }
 
@@ -130,7 +138,7 @@ namespace WebApplication2.Controllers
                 Price = product.Price,
                 CategoryId = product.CategoryId,
             };
-            GetCategory();
+            await GetCategory<Product>();
             return View(editProductViewModel);
         }
 
@@ -151,37 +159,15 @@ namespace WebApplication2.Controllers
                 ModelState.AddModelError("", "Product data is null.");
                 return View(new EditProductViewMoldes());
             }
-            var OldProduct = await _productServices.GetProductByIdAsync(id);
-
-            if (OldProduct == null)
-            {
-                return NotFound("Product not found");
-            }
+            
 
             try
             {
 
 
                 if (ModelState.IsValid)
-                {
-                    // check to user need update phote
-                    if (NewProduct.Files != null)
-                    {
-                      
-                        // hna a7na 3mla update fe file ale server
-                        var NewImagePath = await _fileServices.UpdateImageAsync(OldProduct.Images.Select(img => img.Images).ToList(), NewProduct.Files, "Product");
-
-                        // update in image table
-                        var r = await _imagesServices.UpdateImageAsync(OldProduct, NewImagePath);
-
-                    }
-
-                    OldProduct.Name = NewProduct.Name;
-                    OldProduct.Price = NewProduct.Price;
-                    OldProduct.CategoryId = NewProduct.CategoryId;
-
-                    // update product 
-                    var result = _productServices.UpdateProduct(OldProduct);
+                { 
+                    var result = await _productServices.UpdateProduct(NewProduct);
 
                     if (result == "Success")
                     {
@@ -189,21 +175,21 @@ namespace WebApplication2.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Failed to update product");
-                        GetCategory(OldProduct);
+                       ModelState.AddModelError("", "Failed to update product");
+                        await GetCategory(NewProduct);
                         return View(NewProduct);
                     }
 
 
                 }
 
-                GetCategory(OldProduct);
+                 await GetCategory(NewProduct);
                 return View(NewProduct);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", $"Error updating product: {ex.Message}");
-                GetCategory(OldProduct);
+                await GetCategory(NewProduct);
                 return View(NewProduct);
             }
         }
