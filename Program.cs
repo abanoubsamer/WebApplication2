@@ -23,12 +23,13 @@ namespace WebApplication2
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DbContext")));
 
             // Add services to the container
-            builder.Services.AddControllersWithViews();
+         
             builder.Services.AddTransient<ICategoriesServices, CategoriesServices>();
             builder.Services.AddTransient<IImagesServices, ImagesServices>();
             builder.Services.AddTransient<IProductServices, ProductServices>();
             builder.Services.AddTransient<IFileServices, FileServices>();
-
+            builder.Services.AddTransient<IHttpContextAccessor,HttpContextAccessor>();
+            builder.Services.AddControllersWithViews();
             // Configure Kestrel server options
             builder.WebHost.ConfigureKestrel(serverOptions =>
             {
